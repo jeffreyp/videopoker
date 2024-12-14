@@ -7,10 +7,8 @@ let defaultState = {
 export default (state = defaultState, action) => {
     switch (action.type) {
         case ADD_CREDIT:
-            console.log("JCP ADD CREDIT " + state.amount);
             return { ...state, amount: state.amount + action.payload };
         case SUBTRACT_CREDIT:
-            console.log("JCP SUBTRACT CREDIT " + state.amount);
             return { ...state, amount: state.amount - action.payload };
         default:
             return state;

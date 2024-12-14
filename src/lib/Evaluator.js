@@ -21,15 +21,15 @@ export const evaluateHand = (hand) => {
         case "Flush":    
         case "Straight Flush":
             if (solved.descr === "Royal Flush") {
-                return { name: "Royal Flush", pay: evaluatePay("Royal Flush") };
+                return { name: "Royal Flush", win: evaluatePay("Royal Flush") };
             }
-            return { name: solved.name, pay: evaluatePay(solved.name) };
+            return { name: solved.name, win: evaluatePay(solved.name) };
         case "Pair":
             if (solved.descr === "Pair, J's" ||
                 solved.descr === "Pair, Q's" ||
                 solved.descr === "Pair, K's" ||
                 solved.descr === "Pair, A's") {
-                return { name: "Jacks or Better", pay: evaluatePay("Jacks or Better") };
+                return { name: "Jacks or Better", win: evaluatePay("Jacks or Better") };
             }
         default:
             return { name: "", win: 0 };

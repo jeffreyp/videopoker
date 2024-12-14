@@ -11,7 +11,6 @@ class DealBtnContainer extends Component {
         } else {
             this.props.dealNextCards();
             this.props.revealCards();
-            this.props.addCredits();
         }
     }
 
@@ -25,7 +24,8 @@ class DealBtnContainer extends Component {
 const mapDispatchToProps = { newHand, dealNextCards, revealCards, subtractCredits, addCredits };
 
 const mapStateToProps = (state) => ({
-    roundEnded: state.game.roundEnded
+    roundEnded: state.game.roundEnded,
+    handWin: state.game.handWin
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(DealBtnContainer);

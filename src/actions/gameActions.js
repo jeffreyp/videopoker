@@ -37,12 +37,23 @@ export const dealNextCards = () => {
             payload: { hand, deck }
         });
         dispatch(hideDiscardedCards());
+        
+        // Get updated state after DEAL_NEXT_CARDS
+        const updatedState = getState();
+        if (updatedState.game.handWin && updatedState.game.handWin.win > 0) {
+            setTimeout(() => {
+                dispatch({ type: ADD_CREDIT, payload: updatedState.game.handWin.win });
+            }, 600); // Wait for card reveal animation
+        }
     };
 };
 
 export const addCredits = () => {
     return (dispatch, getState) => {
-        dispatch({ type: ADD_CREDIT, payload: getState().game.handWin.win });
+        const handWin = getState().game.handWin;
+        if (handWin && handWin.win) {
+            dispatch({ type: ADD_CREDIT, payload: handWin.win });
+        }
     };
 };
 

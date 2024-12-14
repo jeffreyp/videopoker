@@ -3,21 +3,44 @@ import { connect } from 'react-redux';
 import CountUp from "react-countup";
 
 class CreditContainer extends Component {
-    getAnimationDuration(start, end) {
-        const delta = Math.abs(end - start);
-        if (delta <= 20) return 0.65;
-        if (delta <= 250) return 1.2;
-        return 5;
+    constructor(props) {
+        super(props);
+        this.state = { 
+            currentAmount: props.credits
+         };
+    }
+
+    updateCurrentAmount(amount) {
+        this.setState({
+            currentAmount: amount
+        });
+    }
+
+    getAnimationDuration() {
+        if (this.state.currentAmount < this.props.credits) {
+            let delta = this.props.credits - this.state.currentAmount;
+            if (delta <= 20) {
+                return 0.65;
+            }
+            if (delta <= 250) {
+                return 1.2;
+            }
+            return 5; // full house
+        } else {
+            return 0.000001;
+        }
     }
 
     render() {
+        console.log("JCP: CreditContainer.render: ", this.props); 
         return (
             <CountUp
-                start={this.props.previousCredits || 0}
+                start={this.state.currentAmount || 0}
                 end={this.props.credits}
-                duration={this.getAnimationDuration(this.props.previousCredits || 0, this.props.credits)}
+                duration={this.getAnimationDuration()}
                 delay={0}
-                useEasing={true}
+                useEasing={false}
+                onEnd={() => this.updateCurrentAmount(this.props.credits)}
                 prefix="CREDIT "
             >
                 {({ countUpRef }) => (
@@ -30,9 +53,10 @@ class CreditContainer extends Component {
     }
 }
 
+const mapDispatchToProps = { };
+
 const mapStateToProps = (state) => ({
-    credits: state.credit.amount,
-    previousCredits: state.credit.previousAmount // You'll need to track previous amount in Redux
+    credits: state.credit.amount
 });
 
-export default connect(mapStateToProps)(CreditContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CreditContainer);
