@@ -32,7 +32,6 @@ class CreditContainer extends Component {
     }
 
     render() {
-        console.log("JCP: CreditContainer.render: ", this.props); 
         return (
             <CountUp
                 start={this.state.currentAmount || 0}
