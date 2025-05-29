@@ -1,0 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+
+div {
+    /* overflow: hidden; */
+}
+
+body {
+    user-select: none;
+    touch-action: manipulation;
+    position: fixed;
+    overflow: hidden;
+}
