@@ -22,6 +22,12 @@
     }
 }
 
+@mixin iPadLandscape {
+    @media only screen and (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+        @content;
+    }
+}
+
 @mixin landscapeGeneral {
     @media only screen and (orientation: landscape) and (max-height: 600px) {
         @content;
