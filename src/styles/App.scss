@@ -5,6 +5,7 @@
 :root {
     font-size: 14px;
     @include phoneHorizontalWidth { font-size: 8px; }
+    @include landscapeGeneral { font-size: 10px; }
 }
 
 .App {
@@ -14,9 +15,21 @@
     height: 100vh;
     width: 100vw;
     max-width: 125vh;
+    margin: 0 auto;
     @include phoneHorizontalOnly {
         max-width: 100vw;
         grid-template: "paytable buttons" "hand buttons" "bottomrow buttons";
+    }
+    @include landscapeTablet {
+        max-width: 100vw;
+        grid-template: "paytable buttons" "hand buttons" "bottomrow buttons";
+        grid-template-columns: 1fr auto;
+        padding: 10px;
+    }
+    @include landscapeGeneral {
+        max-width: 100vw;
+        grid-template: "paytable buttons" "hand buttons" "bottomrow buttons";
+        grid-template-columns: 1fr auto;
     }
     background-color: $bg-color;
     color: $main-text-color;
@@ -44,6 +57,9 @@ span {
     @include phoneVerticalWidth {
         padding-top: 10px;
     }
+    @include landscapeGeneral {
+        padding-top: 8px;
+    }
 
     .payTable {
         width: 100%;
@@ -59,6 +75,9 @@ span {
             -webkit-text-stroke: 0;
             @include phoneVerticalWidth {
                 font-size: 1.15rem;
+            }
+            @include landscapeGeneral {
+                font-size: 1rem;
             }
         }
 
@@ -108,6 +127,18 @@ span {
         @include phoneHorizontalOnly {
             height: 5rem;
         }
+        @include landscapeTablet {
+            height: 6rem;
+            span {
+                font-size: 2.5rem;
+            }
+        }
+        @include landscapeGeneral {
+            height: 4rem;
+            span {
+                font-size: 2rem;
+            }
+        }
     }
 
     .cardContainer {
@@ -141,6 +172,12 @@ span {
                 @include phoneHorizontalOnly {
                     max-height: 25vh;
                 }
+                @include landscapeTablet {
+                    max-height: 30vh;
+                }
+                @include landscapeGeneral {
+                    max-height: 28vh;
+                }
             }
         }
     }
@@ -156,6 +193,13 @@ span {
     @include phoneHorizontalWidth {
         span {
             -webkit-text-stroke: 1px $text-stroke-color;
+        }
+    }
+    @include landscapeGeneral {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        span {
+            font-size: 1.8rem;
         }
     }
     .bet {
@@ -191,6 +235,24 @@ span {
         grid-template-columns: unset;
         grid-row-gap: 10px;
         height: unset;
+        width: 200px;
+        justify-self: end;
+    }
+    @include landscapeTablet {
+        grid-template-columns: unset;
+        grid-row-gap: 10px;
+        height: unset;
+        width: 200px;
+        justify-self: end;
+        align-self: center;
+    }
+    @include landscapeGeneral {
+        grid-template-columns: unset;
+        grid-row-gap: 8px;
+        height: unset;
+        width: 180px;
+        justify-self: end;
+        align-self: center;
     }
     padding-left: 1px;
     padding-right: 1px;
@@ -207,6 +269,10 @@ span {
         font-size: 1.25rem;
         @include phoneVerticalWidth {
             font-size: 1.5rem;
+        }
+        @include landscapeGeneral {
+            font-size: 1rem;
+            min-height: 50px;
         }
         background: #e0c725;
         border-radius: 2px;
