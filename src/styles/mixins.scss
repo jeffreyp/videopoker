@@ -16,6 +16,18 @@
     }
 }
 
+@mixin landscapeTablet {
+    @media only screen and (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+        @content;
+    }
+}
+
+@mixin landscapeGeneral {
+    @media only screen and (orientation: landscape) and (max-height: 600px) {
+        @content;
+    }
+}
+
 @mixin phoneVerticalWidth {
     @media all and (max-width: 480px) {
         @content;
