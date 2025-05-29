@@ -1,18 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
+import { useGameContext } from '../context/GameContext';
 
-class WinContainer extends Component {
-    render() {
-        if (this.props.roundEnded) {
-            return <span className="winContainer">WIN {this.props.win}</span>;
-        }
-        return <span>&nbsp;</span>;
+const WinContainer = () => {
+    const { state } = useGameContext();
+    const { roundEnded, win } = {
+        roundEnded: state.game.roundEnded,
+        win: state.game.handWin.win
+    };
+    
+    if (roundEnded) {
+        return <span className="winContainer">WIN {win}</span>;
     }
-}
+    return <span>&nbsp;</span>;
+};
 
-const mapStateToProps = (state) => ({
-    win: state.game.handWin.win,
-    roundEnded: state.game.roundEnded
-});
-
-export default connect(mapStateToProps)(WinContainer);
+export default React.memo(WinContainer);

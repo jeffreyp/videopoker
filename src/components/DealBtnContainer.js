@@ -1,31 +1,39 @@
-import React,  { Component } from 'react';
-import { connect } from 'react-redux';
-import { newHand, dealNextCards, revealCards, subtractCredits, addCredits } from '../actions/index';
+import React, { useCallback } from 'react';
+import { useGameContext } from '../context/GameContext';
+import { useGameActions } from '../hooks/useGameActions';
 
-class DealBtnContainer extends Component {
-    handleButton() {
-        if (this.props.roundEnded) {
-            this.props.subtractCredits();
-            this.props.newHand();
-            this.props.revealCards();
+const DealBtnContainer = () => {
+    const { state } = useGameContext();
+    const { newHand, dealNextCards, revealCards, subtractCredits } = useGameActions();
+    const roundEnded = state.game.roundEnded;
+    const imagesLoaded = state.ui.cardImageLoaded;
+
+    const handleButton = useCallback(() => {
+        if (!imagesLoaded) return;
+        
+        if (roundEnded) {
+            subtractCredits();
+            newHand();
+            setTimeout(() => {
+                revealCards();
+            }, 50);
         } else {
-            this.props.dealNextCards();
-            this.props.revealCards();
+            dealNextCards();
+            setTimeout(() => {
+                revealCards();
+            }, 50);
         }
-    }
+    }, [roundEnded, subtractCredits, newHand, revealCards, dealNextCards, imagesLoaded]);
 
-    render() {
-        return (
-            <button onClick={this.handleButton.bind(this)} className={this.props.roundEnded ? "flash" : "" }>DEAL</button>
-        );
-    }
-}
+    return (
+        <button 
+            onClick={handleButton} 
+            className={roundEnded ? "flash" : ""} 
+            disabled={!imagesLoaded}
+        >
+            {imagesLoaded ? "DEAL" : "Loading..."}
+        </button>
+    );
+};
 
-const mapDispatchToProps = { newHand, dealNextCards, revealCards, subtractCredits, addCredits };
-
-const mapStateToProps = (state) => ({
-    roundEnded: state.game.roundEnded,
-    handWin: state.game.handWin
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(DealBtnContainer);
+export default DealBtnContainer;

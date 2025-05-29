@@ -1,60 +1,49 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useMemo } from "react";
 import PayTableData from "../lib/PayTableData";
-class PayTableContainer extends Component {
-    constructor(props) {
-        super(props);
+import { useGameContext } from '../context/GameContext';
 
-        this.keyCount = 0;
-        this.getKey = this.getKey.bind(this);
-    }
-    getKey() {
-        return this.keyCount++;
-    }
-
-    render() {
-        return (
-            <article className="payTableContainer padded">
-                <table className="payTable">
-                    <tbody>
-                        {PayTableData.map((row) => {
-                            let classes = "";
-                            if (this.props.handWinName === row[0].pokersolver) {
-                                if (this.props.roundEnded) {
-                                    classes = "blink white";
-                                } else {
-                                    classes = "white";
-                                }
+const PayTableContainer = () => {
+    const { state } = useGameContext();
+    const { handWinName, roundEnded } = { 
+        handWinName: state.game.handWin.name, 
+        roundEnded: state.game.roundEnded 
+    };
+    const tableRows = useMemo(() => {
+        return PayTableData.map((row, rowIndex) => {
+            let classes = "";
+            if (handWinName === row[0].pokersolver) {
+                if (roundEnded) {
+                    classes = "blink white";
+                } else {
+                    classes = "white";
+                }
+            }
+            return (
+                <tr key={rowIndex}>
+                    {row.map((c, index) => (
+                        <td
+                            key={index}
+                            className={
+                                index === 5 ? "active" : "" /* todo when we implement changing bets*/
                             }
-                            return (
-                                <tr key={this.getKey()}>
-                                    {row.map((c, index) => (
-                                        <td
-                                            key={this.getKey()}
-                                            className={
-                                                index === 5 ? "active" : "" /* todo when we implement changing bets*/
-                                            }
-                                        >
-                                            <span className={classes}>{typeof c === "object" ? c.display : c}</span>
-                                        </td>
-                                    ))}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            </article>
-        );
-    }
-}
+                        >
+                            <span className={classes}>{typeof c === "object" ? c.display : c}</span>
+                        </td>
+                    ))}
+                </tr>
+            );
+        });
+    }, [handWinName, roundEnded]);
 
-const mapDispatchToProps = {};
+    return (
+        <article className="payTableContainer padded">
+            <table className="payTable">
+                <tbody>
+                    {tableRows}
+                </tbody>
+            </table>
+        </article>
+    );
+};
 
-const mapStateToProps = (state) => ({
-    roundEnded: state.game.roundEnded,
-    handWinName: state.game.handWin.name
-});
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PayTableContainer);
+export default React.memo(PayTableContainer);

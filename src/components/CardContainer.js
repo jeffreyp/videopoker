@@ -1,44 +1,37 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useCallback } from "react";
 import Card from "./Card";
 import CardHold from "./CardHold";
-import { holdCard } from "../actions/index";
+import { useGameContext } from "../context/GameContext";
+import { useGameActions } from "../hooks/useGameActions";
 
-class CardContainer extends Component {
-    handleCardClick = (id) => {
-        if (!this.props.roundEnded) this.props.holdCard(id);
-    }
+const CardContainer = () => {
+    const { state } = useGameContext();
+    const { holdCard } = useGameActions();
+    
+    const { hand, hold, roundEnded } = state.game;
+    const { cardRevealed } = state.ui;
 
-    render() {
-        let cards = this.props.hand;
-        return (
-            <div className="cardContainer padded">
-                {Object.keys(cards).map((key) => {
-                    return (
-                        <figure key={key}
-                                onClick={() => this.handleCardClick(key)}>
-                            <CardHold hold={this.props.hold[key]} />
-                            <Card id={key}
-                                  card={cards[key]}
-                                  revealed={this.props.cardRevealed[key]}
-                                  
-                            />
-                        </figure>   
-                    );
-                })}
-            </div>
-        );
-    }
-}
+    const handleCardClick = useCallback((id) => {
+        if (!roundEnded) holdCard(id);
+    }, [roundEnded, holdCard]);
 
-const mapDispatchToProps = { holdCard };
+    return (
+        <div className="cardContainer padded">
+            {Object.keys(hand).map((key) => {
+                return (
+                    <figure key={key}
+                            onClick={() => handleCardClick(key)}>
+                        <CardHold hold={hold[key]} />
+                        <Card id={key}
+                              card={hand[key]}
+                              revealed={cardRevealed[key]}
+                        />
+                    </figure>   
+                );
+            })}
+        </div>
+    );
+};
 
-const mapStateToProps = (state) => ({
-    hand: state.game.hand,
-    hold: state.game.hold,
-    roundEnded: state.game.roundEnded,
-    cardRevealed: state.ui.cardRevealed
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CardContainer);
+export default CardContainer;
 

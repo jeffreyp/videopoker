@@ -41,9 +41,16 @@ export const dealNextCards = () => {
         // Get updated state after DEAL_NEXT_CARDS
         const updatedState = getState();
         if (updatedState.game.handWin && updatedState.game.handWin.win > 0) {
-            setTimeout(() => {
-                dispatch({ type: ADD_CREDIT, payload: updatedState.game.handWin.win });
-            }, 600); // Wait for card reveal animation
+            // Use requestAnimationFrame for better timing control
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    // Verify state hasn't changed before adding credits
+                    const currentState = getState();
+                    if (currentState.game.handWin && currentState.game.handWin.win === updatedState.game.handWin.win) {
+                        dispatch({ type: ADD_CREDIT, payload: currentState.game.handWin.win });
+                    }
+                }, 600);
+            });
         }
     };
 };

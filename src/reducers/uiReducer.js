@@ -1,12 +1,12 @@
 import {
-/*    UI_CARD_IMAGE_LOADED, */
+    UI_CARD_IMAGE_LOADED,
     UI_CARD_REVEAL,
     UI_CARD_RESET,
     NEW_HAND,
     HOLD_CARD
 } from "../actions/index";
 
-let defaultState = {
+export const initialUiState = {
     cardImageLoaded: false,
     cardRevealed: {
         0: false,
@@ -17,7 +17,7 @@ let defaultState = {
     }
 };
 
-export default (state = defaultState, action) => {
+export const uiReducer = (state = initialUiState, action) => {
     switch (action.type) {
         case NEW_HAND:
             return {
@@ -32,6 +32,11 @@ export default (state = defaultState, action) => {
             };
         case HOLD_CARD:
             return state;
+        case UI_CARD_IMAGE_LOADED:
+            return {
+                ...state,
+                cardImageLoaded: true
+            };
         case UI_CARD_REVEAL:
             return {
                 ...state,

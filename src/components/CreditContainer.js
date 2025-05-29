@@ -1,24 +1,19 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useCallback, useMemo } from 'react';
 import CountUp from "react-countup";
+import { useGameContext } from '../context/GameContext';
 
-class CreditContainer extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { 
-            currentAmount: props.credits
-         };
-    }
+const CreditContainer = () => {
+    const { state } = useGameContext();
+    const credits = state.credit.amount;
+    const [currentAmount, setCurrentAmount] = useState(credits);
 
-    updateCurrentAmount(amount) {
-        this.setState({
-            currentAmount: amount
-        });
-    }
+    const updateCurrentAmount = useCallback((amount) => {
+        setCurrentAmount(amount);
+    }, []);
 
-    getAnimationDuration() {
-        if (this.state.currentAmount < this.props.credits) {
-            let delta = this.props.credits - this.state.currentAmount;
+    const getAnimationDuration = useMemo(() => {
+        if (currentAmount < credits) {
+            let delta = credits - currentAmount;
             if (delta <= 20) {
                 return 0.65;
             }
@@ -29,33 +24,25 @@ class CreditContainer extends Component {
         } else {
             return 0.000001;
         }
-    }
+    }, [currentAmount, credits]);
 
-    render() {
-        return (
-            <CountUp
-                start={this.state.currentAmount || 0}
-                end={this.props.credits}
-                duration={this.getAnimationDuration()}
-                delay={0}
-                useEasing={false}
-                onEnd={() => this.updateCurrentAmount(this.props.credits)}
-                prefix="CREDIT "
-            >
-                {({ countUpRef }) => (
-                    <div className="creditContainer">
-                        <span ref={countUpRef} />
-                    </div>
-                )}
-            </CountUp>
-        );
-    }
-}
+    return (
+        <CountUp
+            start={currentAmount || 0}
+            end={credits}
+            duration={getAnimationDuration}
+            delay={0}
+            useEasing={false}
+            onEnd={() => updateCurrentAmount(credits)}
+            prefix="CREDIT "
+        >
+            {({ countUpRef }) => (
+                <div className="creditContainer">
+                    <span ref={countUpRef} />
+                </div>
+            )}
+        </CountUp>
+    );
+};
 
-const mapDispatchToProps = { };
-
-const mapStateToProps = (state) => ({
-    credits: state.credit.amount
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreditContainer);
+export default CreditContainer;

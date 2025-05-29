@@ -17,4 +17,4 @@ export default (props) => {
     ) : null;
  };
 
- export default CardHold;
+ export default React.memo(CardHold);

@@ -1,10 +1,10 @@
 import { ADD_CREDIT, SUBTRACT_CREDIT } from "../actions/index";
 
-let defaultState = {
+export const initialCreditState = {
     amount: 50
 };
 
-export default (state = defaultState, action) => {
+export const creditReducer = (state = initialCreditState, action) => {
     switch (action.type) {
         case ADD_CREDIT:
             return { ...state, amount: state.amount + action.payload };

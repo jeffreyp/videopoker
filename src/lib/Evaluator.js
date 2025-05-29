@@ -11,6 +11,11 @@ const evaluatePay = (name) => {
 };
 
 export const evaluateHand = (hand) => {
+    // Handle null or invalid hands
+    if (!hand || hand.some(card => card === null)) {
+        return { name: "", win: 0 };
+    }
+    
     let solved = Hand.solve(hand);
     switch (solved.name) {
         case "Two Pair":

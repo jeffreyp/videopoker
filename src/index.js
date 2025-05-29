@@ -4,17 +4,16 @@ import * as ReactDOM from "react-dom/client";
 import "./styles/index.css";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
-import { Provider } from "react-redux";
-import configureStore from "./store";
+import { GameProvider } from "./context/GameContext";
 import initReactFastClick from "react-fastclick";
 import viewportUnitsBuggyfill from "viewport-units-buggyfill";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-    <Provider store={configureStore()}>
+    <GameProvider>
         <App />
-    </Provider>
+    </GameProvider>
 );
 registerServiceWorker();
 initReactFastClick();

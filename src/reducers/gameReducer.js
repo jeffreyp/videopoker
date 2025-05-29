@@ -1,7 +1,7 @@
 import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS } from "../actions/index";
 import { evaluateHand } from "../lib/Evaluator";
 
-let defaultState = {
+export const initialGameState = {
     hand: [null, null, null, null, null],
     hold: [false, false, false, false, false],
     deck: [],
@@ -9,11 +9,11 @@ let defaultState = {
     handWin: { name: "", win: 0 }
 };
 
-export default (state = defaultState, action) => {
+export const gameReducer = (state = initialGameState, action) => {
     switch (action.type) {
         case NEW_HAND:
             return {
-                ...defaultState,
+                ...initialGameState,
                 hand: action.payload.hand,
                 deck: action.payload.deck,
                 roundEnded: false,
