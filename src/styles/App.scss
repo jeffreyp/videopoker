@@ -9,12 +9,11 @@
 }
 
 .App {
-    font-family: "Press Start 2P", cursive;
+    font-family: "Merriweather", serif;
     display: grid;
     grid-template: "paytable" "hand" "bottomrow" "buttons";
     height: 100vh;
     width: 100vw;
-    max-width: 125vh;
     margin: 0 auto;
     @include phoneHorizontalOnly {
         max-width: 100vw;
@@ -177,11 +176,12 @@ span {
             margin-inline-start: 0px;
             margin-inline-end: 0px;
             .cardHold {
-                font-size: 1rem;
+                font-size: 1.2rem;
                 -webkit-text-stroke: 0;
                 color: $text-highlight-color;
                 padding-bottom: 10px;
                 text-align: center;
+                width: 100%;
             }
             img.card {
                 max-width: 99%;
@@ -249,22 +249,23 @@ span {
 .buttonRow {
     grid-area: buttons;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 2fr;
+    grid-template-columns: 2fr 4fr;
     grid-column-gap: 10px;
     height: 75px;
+    justify-self: center;
     @include phoneHorizontalOnly {
         grid-template-columns: unset;
         grid-row-gap: 10px;
         height: unset;
         width: 200px;
-        justify-self: end;
+        justify-self: center;
     }
     @include landscapeTablet {
         grid-template-columns: unset;
         grid-row-gap: 10px;
         height: unset;
         width: 200px;
-        justify-self: end;
+        justify-self: center;
         align-self: center;
     }
     @include iPadLandscape {
@@ -272,7 +273,7 @@ span {
         grid-row-gap: 8px;
         height: unset;
         width: 200px;
-        justify-self: end;
+        justify-self: center;
         align-self: center;
         margin-top: 0;
     }
@@ -281,18 +282,18 @@ span {
         grid-row-gap: 8px;
         height: unset;
         width: 180px;
-        justify-self: end;
+        justify-self: center;
         align-self: center;
     }
     padding-left: 1px;
     padding-right: 1px;
-    padding-bottom: 3px;
+    padding-bottom: 20px;
     .logo {
         height: 10px;
         visibility: hidden;
     }
     button {
-        font-family: "Press Start 2P", cursive;
+        font-family: "Merriweather", serif;
         cursor: pointer;
         text-align: center;
         color: black;
