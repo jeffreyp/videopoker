@@ -32,7 +32,7 @@
         padding: 10px;
         min-height: 100vh;
         height: 100vh;
-        align-content: space-between;
+        align-content: start;
         overflow: hidden;
     }
     @include landscapeGeneral {
@@ -42,7 +42,7 @@
     }
     background-color: $bg-color;
     color: $main-text-color;
-    align-content: space-between;
+    align-content: start;
 }
 
 span {
@@ -52,22 +52,22 @@ span {
 }
 
 .padded {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 8px;
+    padding-right: 8px;
     @include phoneVerticalWidth {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
     }
 }
 
 .payTableContainer {
     grid-area: paytable;
-    padding-top: 15px;
+    padding-top: 8px;
     @include phoneVerticalWidth {
-        padding-top: 10px;
+        padding-top: 5px;
     }
     @include landscapeGeneral {
-        padding-top: 8px;
+        padding-top: 3px;
     }
 
     .payTable {
@@ -126,31 +126,31 @@ span {
         display: flex;
         align-items: center;
         text-align: center;
-        line-height: 5rem;
-        height: 10rem;
+        line-height: 3rem;
+        height: 6rem;
         @include phoneHorizontalWidth {
             span {
                 font-size: 2.8rem;
             }
         }
         @include phoneHorizontalOnly {
-            height: 5rem;
+            height: 3rem;
         }
         @include landscapeTablet {
-            height: 6rem;
+            height: 4rem;
             span {
                 font-size: 2.5rem;
             }
         }
         @include iPadLandscape {
-            height: 5rem;
-            line-height: 4rem;
+            height: 3rem;
+            line-height: 2.5rem;
             span {
                 font-size: 2.2rem;
             }
         }
         @include landscapeGeneral {
-            height: 4rem;
+            height: 3rem;
             span {
                 font-size: 2rem;
             }
@@ -160,14 +160,14 @@ span {
     .cardContainer {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        grid-column-gap: 15px;
+        grid-column-gap: 8px;
 
         @include tabletWidth {
-            grid-column-gap: 20px;
+            grid-column-gap: 12px;
         }
 
         @include phoneVerticalWidth {
-            grid-column-gap: 10px;
+            grid-column-gap: 5px;
         }
 
         figure {
@@ -179,7 +179,7 @@ span {
                 font-size: 1.2rem;
                 -webkit-text-stroke: 0;
                 color: $text-highlight-color;
-                padding-bottom: 10px;
+                padding-bottom: 5px;
                 text-align: center;
                 width: 100%;
             }
@@ -209,16 +209,16 @@ span {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     @include phoneHorizontalWidth {
         span {
             -webkit-text-stroke: 1px $text-stroke-color;
         }
     }
     @include landscapeGeneral {
-        padding-top: 5px;
-        padding-bottom: 5px;
+        padding-top: 3px;
+        padding-bottom: 3px;
         span {
             font-size: 1.8rem;
         }
@@ -251,7 +251,7 @@ span {
     display: grid;
     grid-template-columns: 2fr 4fr;
     grid-column-gap: 10px;
-    height: 75px;
+    height: 60px;
     justify-self: center;
     @include phoneHorizontalOnly {
         grid-template-columns: unset;
@@ -287,7 +287,7 @@ span {
     }
     padding-left: 1px;
     padding-right: 1px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     .logo {
         height: 10px;
         visibility: hidden;
