@@ -24,7 +24,10 @@ const App = () => {
 		</section>
 		<section className="buttonRow">
 			<button 
-				onClick={() => window.location.href="#"}
+				onClick={(e) => {
+					e.preventDefault();
+					console.log("Help button clicked");
+				}}
 				aria-label="Show game help"
 			>
 				HELP

@@ -7,7 +7,7 @@ const evaluatePay = (name) => {
             return row[5]; // bet 5
         }
     }
-    return NaN; // this should never happen
+    return 0;
 };
 
 export const evaluateHand = (hand) => {

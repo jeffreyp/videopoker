@@ -5,10 +5,17 @@ import { uiReducer, initialUiState } from '../reducers/uiReducer';
 
 // Combine all reducers into one
 const combineReducers = (reducers) => (state, action) => {
-    return Object.keys(reducers).reduce((nextState, key) => {
-        nextState[key] = reducers[key](state[key], action);
-        return nextState;
-    }, {});
+    const nextState = {};
+    let hasChanged = false;
+    
+    Object.keys(reducers).forEach(key => {
+        const previousStateForKey = state[key];
+        const nextStateForKey = reducers[key](previousStateForKey, action);
+        nextState[key] = nextStateForKey;
+        hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+    });
+    
+    return hasChanged ? nextState : state;
 };
 
 const rootReducer = combineReducers({

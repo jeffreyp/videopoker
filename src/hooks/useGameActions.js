@@ -60,11 +60,9 @@ export const useGameActions = () => {
         // Add credits after animation
         const handWin = evaluateHand(hand);
         if (handWin && handWin.win > 0) {
-            const timeoutId = setTimeout(() => {
+            setTimeout(() => {
                 dispatch({ type: ADD_CREDIT, payload: handWin.win });
             }, 600);
-            
-            return () => clearTimeout(timeoutId);
         }
     }, [state.game.deck, state.game.hand, state.game.hold, dispatch]);
 

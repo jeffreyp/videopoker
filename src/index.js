@@ -11,9 +11,11 @@ import viewportUnitsBuggyfill from "viewport-units-buggyfill";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-    <GameProvider>
-        <App />
-    </GameProvider>
+    <React.StrictMode>
+        <GameProvider>
+            <App />
+        </GameProvider>
+    </React.StrictMode>
 );
 registerServiceWorker();
 initReactFastClick();
