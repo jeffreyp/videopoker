@@ -4,6 +4,7 @@ export * from "./uiActions";
 export const NEW_HAND = "new_hand";
 export const HOLD_CARD = "hold card";
 export const DEAL_NEXT_CARDS = "deal next";
+export const SET_BET_AMOUNT = "set bet amount";
 
 export const ADD_CREDIT = "add credits";
 export const SUBTRACT_CREDIT = "subtract credits";

@@ -1,4 +1,4 @@
-import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, hideDiscardedCards, ADD_CREDIT, SUBTRACT_CREDIT } from "./index";
+import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, hideDiscardedCards, ADD_CREDIT, SUBTRACT_CREDIT } from "./index";
 import CardList from "../lib/CardList";
 import _ from "lodash";
 
@@ -66,6 +66,14 @@ export const addCredits = () => {
 
 export const subtractCredits = () => {
     return (dispatch, getState) => {
-        dispatch({ type: SUBTRACT_CREDIT, payload: 5 });
+        const betAmount = getState().game.betAmount;
+        dispatch({ type: SUBTRACT_CREDIT, payload: betAmount });
+    };
+};
+
+export const setBetAmount = (amount) => {
+    return {
+        type: SET_BET_AMOUNT,
+        payload: amount
     };
 };

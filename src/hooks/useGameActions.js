@@ -7,6 +7,7 @@ import {
     NEW_HAND, 
     HOLD_CARD, 
     DEAL_NEXT_CARDS, 
+    SET_BET_AMOUNT,
     ADD_CREDIT, 
     SUBTRACT_CREDIT, 
     UI_CARD_REVEAL, 
@@ -58,20 +59,25 @@ export const useGameActions = () => {
         }
 
         // Add credits after animation
-        const handWin = evaluateHand(hand);
+        const handWin = evaluateHand(hand, state.game.betAmount);
         if (handWin && handWin.win > 0) {
             setTimeout(() => {
                 dispatch({ type: ADD_CREDIT, payload: handWin.win });
             }, 600);
         }
-    }, [state.game.deck, state.game.hand, state.game.hold, dispatch]);
+    }, [state.game.deck, state.game.hand, state.game.hold, state.game.betAmount, dispatch]);
 
     const addCredits = useCallback((amount) => {
         dispatch({ type: ADD_CREDIT, payload: amount });
     }, [dispatch]);
 
-    const subtractCredits = useCallback((amount = 5) => {
-        dispatch({ type: SUBTRACT_CREDIT, payload: amount });
+    const subtractCredits = useCallback(() => {
+        const betAmount = state.game.betAmount;
+        dispatch({ type: SUBTRACT_CREDIT, payload: betAmount });
+    }, [state.game.betAmount, dispatch]);
+
+    const setBetAmount = useCallback((amount) => {
+        dispatch({ type: SET_BET_AMOUNT, payload: amount });
     }, [dispatch]);
 
     const revealCards = useCallback(() => {
@@ -106,6 +112,7 @@ export const useGameActions = () => {
         dealNextCards,
         addCredits,
         subtractCredits,
+        setBetAmount,
         revealCards,
         hideDiscardedCards,
         cardImageLoaded

@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles/App.scss";
+import BetContainer from "./components/BetContainer";
 import CardContainer from "./components/CardContainer";
 import CreditContainer from "./components/CreditContainer";
 import DealBtnContainer from "./components/DealBtnContainer";
@@ -18,7 +19,7 @@ const App = () => {
 			<CardContainer />
 		</section>
 		<section className="bottomRow padded">
-			<span className="bet">BET 5</span>
+			<BetContainer />
 			<WinContainer />
 			<CreditContainer />
 		</section>

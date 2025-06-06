@@ -227,8 +227,53 @@ span {
             font-size: 1.8rem;
         }
     }
-    .bet {
+    .bet-container {
         text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        
+        .bet-buttons {
+            display: flex;
+            gap: 3px;
+            
+            .bet-btn {
+                font-family: "Merriweather", serif;
+                background: #e0c725;
+                border: 1px solid #9e9f27;
+                border-radius: 3px;
+                color: black;
+                cursor: pointer;
+                font-size: 0.8rem;
+                padding: 3px 6px;
+                min-width: 30px;
+                
+                &:disabled {
+                    background: #999;
+                    color: #666;
+                    cursor: not-allowed;
+                }
+                
+                &.active {
+                    background: $text-highlight-color;
+                    color: black;
+                    border-color: $text-highlight-color;
+                }
+                
+                &.bet-max {
+                    font-weight: bold;
+                }
+                
+                &:active:not(:disabled) {
+                    border-style: inset;
+                }
+            }
+        }
+        
+        .bet-display {
+            font-size: 1.5rem;
+            -webkit-text-stroke: 2px $text-stroke-color;
+        }
     }
     .winContainer {
         text-align: center;
