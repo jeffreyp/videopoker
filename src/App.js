@@ -23,7 +23,12 @@ const App = () => {
 			<CreditContainer />
 		</section>
 		<section className="buttonRow">
-			<button onClick={() => window.location.href="#"}>HELP</button>
+			<button 
+				onClick={() => window.location.href="#"}
+				aria-label="Show game help"
+			>
+				HELP
+			</button>
 			<DealBtnContainer />
 		</section>
 		</main>

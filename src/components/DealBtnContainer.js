@@ -30,6 +30,7 @@ const DealBtnContainer = () => {
             onClick={handleButton} 
             className={roundEnded ? "flash" : ""} 
             disabled={!imagesLoaded}
+            aria-label={roundEnded ? "Deal new hand" : "Draw cards"}
         >
             {imagesLoaded ? "DEAL" : "Loading..."}
         </button>

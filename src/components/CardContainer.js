@@ -16,15 +16,29 @@ const CardContainer = () => {
     }, [roundEnded, holdCard]);
 
     return (
-        <div className="cardContainer padded">
+        <div className="cardContainer padded" role="group" aria-label="Playing cards">
             {Object.keys(hand).map((key) => {
+                const isHeld = hold[key];
                 return (
-                    <figure key={key}
-                            onClick={() => handleCardClick(key)}>
-                        <CardHold hold={hold[key]} />
-                        <Card id={key}
-                              card={hand[key]}
-                              revealed={cardRevealed[key]}
+                    <figure 
+                        key={key}
+                        onClick={() => handleCardClick(key)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleCardClick(key);
+                            }
+                        }}
+                        tabIndex={roundEnded ? -1 : 0}
+                        role="button"
+                        aria-label={`Card ${parseInt(key) + 1}${isHeld ? ', held' : ', click to hold'}`}
+                        aria-pressed={isHeld}
+                    >
+                        <CardHold hold={isHeld} />
+                        <Card 
+                            id={key}
+                            card={hand[key]}
+                            revealed={cardRevealed[key]}
                         />
                     </figure>   
                 );

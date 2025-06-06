@@ -60,11 +60,11 @@ export const useGameActions = () => {
         // Add credits after animation
         const handWin = evaluateHand(hand);
         if (handWin && handWin.win > 0) {
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    dispatch({ type: ADD_CREDIT, payload: handWin.win });
-                }, 600);
-            });
+            const timeoutId = setTimeout(() => {
+                dispatch({ type: ADD_CREDIT, payload: handWin.win });
+            }, 600);
+            
+            return () => clearTimeout(timeoutId);
         }
     }, [state.game.deck, state.game.hand, state.game.hold, dispatch]);
 
@@ -77,11 +77,17 @@ export const useGameActions = () => {
     }, [dispatch]);
 
     const revealCards = useCallback(() => {
+        const timeouts = [];
         for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
                 dispatch({ type: UI_CARD_REVEAL, payload: i });
             }, i * 100);
+            timeouts.push(timeoutId);
         }
+        
+        return () => {
+            timeouts.forEach(clearTimeout);
+        };
     }, [dispatch]);
 
     const hideDiscardedCards = useCallback(() => {
