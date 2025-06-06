@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/videopoker/static/css/main.c935769a.css",
-    "main.js": "/videopoker/static/js/main.c95e6206.js",
+    "main.css": "/videopoker/static/css/main.473eb7f6.css",
+    "main.js": "/videopoker/static/js/main.0232730a.js",
     "index.html": "/videopoker/index.html",
-    "main.c935769a.css.map": "/videopoker/static/css/main.c935769a.css.map",
-    "main.c95e6206.js.map": "/videopoker/static/js/main.c95e6206.js.map"
+    "main.473eb7f6.css.map": "/videopoker/static/css/main.473eb7f6.css.map",
+    "main.0232730a.js.map": "/videopoker/static/js/main.0232730a.js.map"
   },
   "entrypoints": [
-    "static/css/main.c935769a.css",
-    "static/js/main.c95e6206.js"
+    "static/css/main.473eb7f6.css",
+    "static/js/main.0232730a.js"
   ]
 }
