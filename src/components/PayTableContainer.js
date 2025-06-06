@@ -10,16 +10,14 @@ const PayTableContainer = () => {
     };
     const tableRows = useMemo(() => {
         return PayTableData.map((row, rowIndex) => {
-            let classes = "";
+            let textClasses = "";
+            let rowClasses = "";
             if (handWinName === row[0].pokersolver) {
-                if (roundEnded) {
-                    classes = "blink white";
-                } else {
-                    classes = "white";
-                }
+                textClasses = "white";
+                rowClasses = "highlighted-row";
             }
             return (
-                <tr key={rowIndex}>
+                <tr key={rowIndex} className={rowClasses}>
                     {row.map((c, index) => (
                         <td
                             key={index}
@@ -27,7 +25,7 @@ const PayTableContainer = () => {
                                 index === 5 ? "active" : "" /* todo when we implement changing bets*/
                             }
                         >
-                            <span className={classes}>{typeof c === "object" ? c.display : c}</span>
+                            <span className={textClasses}>{typeof c === "object" ? c.display : c}</span>
                         </td>
                     ))}
                 </tr>

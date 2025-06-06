@@ -117,6 +117,10 @@ span {
                 background-color: $paytable-active-color;
             }
         }
+        
+        .highlighted-row td.active {
+            background-color: rgba(255, 215, 0, 0.3);
+        }
     }
 }
 
@@ -325,4 +329,12 @@ span {
 
 .white {
     color: white;
+}
+
+.highlighted-row {
+    background-color: rgba(255, 215, 0, 0.3);
+    
+    &.blink {
+        background-color: rgba(255, 215, 0, 0.5);
+    }
 }
