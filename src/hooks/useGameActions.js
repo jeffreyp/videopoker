@@ -10,6 +10,8 @@ import {
     SET_BET_AMOUNT,
     ADD_CREDIT, 
     SUBTRACT_CREDIT, 
+    GAME_OVER,
+    RESTART_GAME,
     UI_CARD_REVEAL, 
     UI_CARD_RESET,
     UI_CARD_IMAGE_LOADED 
@@ -42,7 +44,13 @@ export const useGameActions = () => {
         let hand = [...state.game.hand];
         for (let i = 0; i < 5; i++) {
             if (!state.game.hold[i]) {
-                hand[i] = deck.pop();
+                if (deck.length > 0) {
+                    hand[i] = deck.pop();
+                } else {
+                    // If deck is empty, reshuffle remaining cards
+                    deck = _.shuffle(CardList.filter(card => !hand.includes(card)));
+                    hand[i] = deck.pop();
+                }
             }
         }
         
@@ -65,7 +73,7 @@ export const useGameActions = () => {
                 dispatch({ type: ADD_CREDIT, payload: handWin.win });
             }, 600);
         }
-    }, [state.game.deck, state.game.hand, state.game.hold, state.game.betAmount, dispatch]);
+    }, [dispatch]);
 
     const addCredits = useCallback((amount) => {
         dispatch({ type: ADD_CREDIT, payload: amount });
@@ -73,8 +81,17 @@ export const useGameActions = () => {
 
     const subtractCredits = useCallback(() => {
         const betAmount = state.game.betAmount;
+        const currentCredits = state.credit.amount;
+        
         dispatch({ type: SUBTRACT_CREDIT, payload: betAmount });
-    }, [state.game.betAmount, dispatch]);
+        
+        // Check if this would result in game over (no credits left for next minimum bet)
+        if (currentCredits - betAmount < 1) {
+            setTimeout(() => {
+                dispatch({ type: GAME_OVER });
+            }, 100);
+        }
+    }, [dispatch]);
 
     const setBetAmount = useCallback((amount) => {
         dispatch({ type: SET_BET_AMOUNT, payload: amount });
@@ -100,10 +117,14 @@ export const useGameActions = () => {
                 dispatch({ type: UI_CARD_RESET, payload: i });
             }
         }
-    }, [state.game.hold, dispatch]);
+    }, [dispatch]);
 
     const cardImageLoaded = useCallback(() => {
         dispatch({ type: UI_CARD_IMAGE_LOADED });
+    }, [dispatch]);
+
+    const restartGame = useCallback(() => {
+        dispatch({ type: RESTART_GAME });
     }, [dispatch]);
 
     return {
@@ -115,6 +136,7 @@ export const useGameActions = () => {
         setBetAmount,
         revealCards,
         hideDiscardedCards,
-        cardImageLoaded
+        cardImageLoaded,
+        restartGame
     };
 };

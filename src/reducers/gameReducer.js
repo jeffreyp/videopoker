@@ -1,4 +1,4 @@
-import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT } from "../actions/index";
+import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, GAME_OVER, RESTART_GAME } from "../actions/index";
 import { evaluateHand } from "../lib/Evaluator";
 
 export const initialGameState = {
@@ -7,7 +7,8 @@ export const initialGameState = {
     deck: [],
     roundEnded: true,
     handWin: { name: "", win: 0 },
-    betAmount: 1
+    betAmount: 1,
+    isGameOver: false
 };
 
 export const gameReducer = (state = initialGameState, action) => {
@@ -41,6 +42,15 @@ export const gameReducer = (state = initialGameState, action) => {
             return {
                 ...state,
                 betAmount: action.payload
+            };
+        case GAME_OVER:
+            return {
+                ...state,
+                isGameOver: true
+            };
+        case RESTART_GAME:
+            return {
+                ...initialGameState
             };
         default:
             return state;

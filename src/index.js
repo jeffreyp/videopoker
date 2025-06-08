@@ -1,7 +1,7 @@
 
 import React from "react";
 import * as ReactDOM from "react-dom/client";
-import "./styles/index.css";
+import "./styles/index.scss";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { GameProvider } from "./context/GameContext";

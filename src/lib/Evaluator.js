@@ -12,7 +12,7 @@ const evaluatePay = (name, betAmount) => {
 
 export const evaluateHand = (hand, betAmount = 5) => {
     // Handle null or invalid hands
-    if (!hand || hand.some(card => card === null)) {
+    if (!hand || hand.some(card => card === null || card === undefined)) {
         return { name: "", win: 0 };
     }
     

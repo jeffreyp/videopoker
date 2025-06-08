@@ -7,9 +7,11 @@ const BetContainer = () => {
     const { setBetAmount } = useGameActions();
     const betAmount = state.game.betAmount;
     const roundEnded = state.game.roundEnded;
+    const isGameOver = state.game.isGameOver;
+    const credits = state.credit.amount;
 
     const handleBetClick = (amount) => {
-        if (roundEnded) {
+        if (roundEnded && !isGameOver && credits >= amount) {
             setBetAmount(amount);
         }
     };
@@ -21,8 +23,8 @@ const BetContainer = () => {
                     <button
                         key={amount}
                         onClick={() => handleBetClick(amount)}
-                        className={`bet-btn ${betAmount === amount ? 'active' : ''}`}
-                        disabled={!roundEnded}
+                        className={`bet-btn ${betAmount === amount ? 'active' : ''} ${credits < amount ? 'insufficient' : ''}`}
+                        disabled={!roundEnded || isGameOver || credits < amount}
                         aria-label={`Bet ${amount} credit${amount > 1 ? 's' : ''}`}
                     >
                         {amount}
@@ -30,8 +32,8 @@ const BetContainer = () => {
                 ))}
                 <button
                     onClick={() => handleBetClick(5)}
-                    className={`bet-btn bet-max ${betAmount === 5 ? 'active' : ''}`}
-                    disabled={!roundEnded}
+                    className={`bet-btn bet-max ${betAmount === 5 ? 'active' : ''} ${credits < 5 ? 'insufficient' : ''}`}
+                    disabled={!roundEnded || isGameOver || credits < 5}
                     aria-label="Bet max 5 credits"
                 >
                     MAX

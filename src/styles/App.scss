@@ -264,6 +264,12 @@ span {
                     font-weight: bold;
                 }
                 
+                &.insufficient {
+                    background: #666;
+                    color: #333;
+                    border-color: #333;
+                }
+                
                 &:active:not(:disabled) {
                     border-style: inset;
                 }
@@ -381,5 +387,41 @@ span {
     
     &.blink {
         background-color: rgba(255, 215, 0, 0.5);
+    }
+}
+
+.game-over-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    
+    .game-over-content {
+        background-color: $bg-color;
+        border: 3px solid $paytable-color;
+        padding: 30px;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        
+        h2 {
+            margin: 0 0 20px 0;
+            font-size: 3rem;
+            color: $text-highlight-color;
+            -webkit-text-stroke: 2px $text-stroke-color;
+        }
+        
+        p {
+            margin: 10px 0;
+            font-size: 1.5rem;
+            color: $main-text-color;
+            -webkit-text-stroke: 1px $text-stroke-color;
+        }
     }
 }

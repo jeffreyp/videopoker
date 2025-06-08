@@ -4,8 +4,10 @@
   "private": true,
   "homepage": "http://jeffreypratt.org/videopoker",
   "dependencies": {
+    "@csstools/normalize.css": "^12.1.1",
     "@testing-library/jest-dom": "^6.6.3",
     "lodash": "^4.17.21",
+    "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-countup": "^6.5.3",
     "react-dom": "^19.0.0",
@@ -14,6 +16,7 @@
     "react-redux": "^9.2.0",
     "react-scripts": "5.0.1",
     "redux": "^5.0.1",
+    "sanitize.css": "^13.0.0",
     "sass": "^1.82.0",
     "viewport-units-buggyfill": "^0.6.2"
   },

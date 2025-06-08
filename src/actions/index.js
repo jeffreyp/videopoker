@@ -9,6 +9,9 @@ export const SET_BET_AMOUNT = "set bet amount";
 export const ADD_CREDIT = "add credits";
 export const SUBTRACT_CREDIT = "subtract credits";
 
+export const GAME_OVER = "game over";
+export const RESTART_GAME = "restart game";
+
 export const UI_CARD_IMAGE_LOADED = "card image loaded";
 export const UI_CARD_REVEAL = "card reveal";
 export const UI_CARD_RESET = "card reset visibility";

@@ -25,11 +25,17 @@ export const holdCard = (index) => {
 
 export const dealNextCards = () => {
     return (dispatch, getState) => {
-        let deck = getState().game.deck;
+        let deck = [...getState().game.deck];
         let hand = [...getState().game.hand];
         for (let i = 0; i < 5; i++) {
             if (!getState().game.hold[i]) {
-                hand[i] = deck.pop();
+                if (deck.length > 0) {
+                    hand[i] = deck.pop();
+                } else {
+                    // If deck is empty, reshuffle remaining cards
+                    deck = _.shuffle(CardList.filter(card => !hand.includes(card)));
+                    hand[i] = deck.pop();
+                }
             }
         }
         dispatch({
