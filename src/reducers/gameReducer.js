@@ -7,7 +7,7 @@ export const initialGameState = {
     deck: [],
     roundEnded: true,
     handWin: { name: "", win: 0 },
-    betAmount: 1,
+    betAmount: 5,
     isGameOver: false
 };
 
