@@ -37,7 +37,7 @@ export const useGameActions = () => {
             type: HOLD_CARD,
             payload: index
         });
-    }, [dispatch]);
+    }, [dispatch, state.game.hold]);
 
     const dealNextCards = useCallback(() => {
         let deck = [...state.game.deck];
@@ -45,11 +45,13 @@ export const useGameActions = () => {
         for (let i = 0; i < 5; i++) {
             if (!state.game.hold[i]) {
                 if (deck.length > 0) {
-                    hand[i] = deck.pop();
+                    const newCard = deck.pop();
+                    hand[i] = newCard;
                 } else {
                     // If deck is empty, reshuffle remaining cards
                     deck = _.shuffle(CardList.filter(card => !hand.includes(card)));
-                    hand[i] = deck.pop();
+                    const newCard = deck.pop();
+                    hand[i] = newCard;
                 }
             }
         }
@@ -73,7 +75,7 @@ export const useGameActions = () => {
                 dispatch({ type: ADD_CREDIT, payload: handWin.win });
             }, 600);
         }
-    }, [dispatch]);
+    }, [dispatch, state.game.hold, state.game.hand, state.game.deck, state.game.betAmount]);
 
     const addCredits = useCallback((amount) => {
         dispatch({ type: ADD_CREDIT, payload: amount });
@@ -91,7 +93,7 @@ export const useGameActions = () => {
                 dispatch({ type: GAME_OVER });
             }, 100);
         }
-    }, [dispatch]);
+    }, [dispatch, state.game.betAmount, state.credit.amount]);
 
     const setBetAmount = useCallback((amount) => {
         dispatch({ type: SET_BET_AMOUNT, payload: amount });
@@ -117,7 +119,7 @@ export const useGameActions = () => {
                 dispatch({ type: UI_CARD_RESET, payload: i });
             }
         }
-    }, [dispatch]);
+    }, [dispatch, state.game.hold]);
 
     const cardImageLoaded = useCallback(() => {
         dispatch({ type: UI_CARD_IMAGE_LOADED });
