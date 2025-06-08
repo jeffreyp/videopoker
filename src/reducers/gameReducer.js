@@ -33,6 +33,7 @@ export const gameReducer = (state = initialGameState, action) => {
             return {
                 ...state,
                 hand: action.payload.hand,
+                hold: [false, false, false, false, false],
                 roundEnded: true,
                 handWin: evaluateHand(action.payload.hand, state.betAmount),
                 deck: action.payload.deck

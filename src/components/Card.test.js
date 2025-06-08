@@ -30,9 +30,9 @@ describe('Card Component', () => {
     test('renders playing card when revealed', () => {
         render(<Card card="AS" revealed={true} />);
         
-        const cardImg = screen.getByAltText('Playing card');
+        const cardImg = screen.getByAltText('Playing card AS');
         expect(cardImg).toBeInTheDocument();
-        expect(cardImg.dataset.src).toContain('AS.svg');
+        expect(cardImg.src).toContain('AS.svg');
     });
 
     test('memoization works correctly', () => {
@@ -42,6 +42,6 @@ describe('Card Component', () => {
         // Re-render with same props should not create new component
         rerender(<Card {...props} />);
         
-        expect(screen.getByAltText('Playing card')).toBeInTheDocument();
+        expect(screen.getByAltText('Playing card AS')).toBeInTheDocument();
     });
 });
