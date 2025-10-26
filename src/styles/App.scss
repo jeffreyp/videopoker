@@ -117,9 +117,93 @@ span {
                 background-color: $paytable-active-color;
             }
         }
-        
+
         .highlighted-row td.active {
             background-color: rgba(255, 215, 0, 0.3);
+        }
+    }
+}
+
+.oddsDisplayContainer {
+    padding-top: 8px;
+    padding-bottom: 4px;
+    @include phoneVerticalWidth {
+        padding-top: 5px;
+        padding-bottom: 3px;
+    }
+    @include landscapeGeneral {
+        padding-top: 3px;
+        padding-bottom: 2px;
+    }
+
+    .odds-title {
+        margin: 0 0 5px 0;
+        font-size: 1.2rem;
+        color: $text-highlight-color;
+        -webkit-text-stroke: 1px $text-stroke-color;
+        text-align: center;
+        @include landscapeGeneral {
+            font-size: 1rem;
+            margin: 0 0 3px 0;
+        }
+    }
+
+    .oddsTable {
+        width: 100%;
+        border: 3px solid $paytable-color;
+        color: $paytable-color;
+        background-color: $paytable-bg-color;
+        text-align: right;
+        border-collapse: collapse;
+        font-size: 1.1rem;
+        -webkit-text-stroke: 0;
+
+        @include phoneVerticalWidth {
+            font-size: 1rem;
+        }
+        @include landscapeGeneral {
+            font-size: 0.9rem;
+        }
+
+        th {
+            border-left: 3px solid $paytable-color;
+            border-bottom: 2px solid $paytable-color;
+            padding: 3px 5px;
+            background-color: rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            @include phoneHorizontalOnly {
+                padding: 2px 3px;
+            }
+            &:first-child {
+                border-left: none;
+                text-align: left;
+            }
+        }
+
+        td {
+            border-left: 3px solid $paytable-color;
+            padding: 3px 5px;
+            @include phoneHorizontalOnly {
+                padding: 2px 3px;
+            }
+            &:first-child {
+                border-left: none;
+            }
+        }
+
+        .odds-hand-name {
+            text-align: left;
+        }
+
+        .odds-total {
+            border-top: 2px solid $paytable-color;
+            background-color: rgba(255, 215, 0, 0.2);
+            font-weight: bold;
+
+            td {
+                padding-top: 5px;
+                padding-bottom: 5px;
+            }
         }
     }
 }
