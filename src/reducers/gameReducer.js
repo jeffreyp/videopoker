@@ -2,6 +2,11 @@ import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, GAME_OVER, RESTAR
 import { evaluateHand } from "../lib/Evaluator";
 import { calculateProbabilities } from "../lib/ProbabilityCalculator";
 
+// Check if device is touch-enabled (mobile/tablet)
+const isTouchDevice = () => {
+    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+};
+
 export const initialGameState = {
     hand: [null, null, null, null, null],
     hold: [false, false, false, false, false],
@@ -17,6 +22,8 @@ export const gameReducer = (state = initialGameState, action) => {
     switch (action.type) {
         case NEW_HAND:
             const initialHold = [false, false, false, false, false];
+            // Skip probability calculation on touch devices for performance
+            const initialProbs = isTouchDevice() ? null : calculateProbabilities(action.payload.hand, initialHold);
             return {
                 ...initialGameState,
                 betAmount: state.betAmount,
@@ -24,15 +31,17 @@ export const gameReducer = (state = initialGameState, action) => {
                 deck: action.payload.deck,
                 roundEnded: false,
                 handWin: evaluateHand(action.payload.hand, state.betAmount),
-                probabilities: calculateProbabilities(action.payload.hand, initialHold)
+                probabilities: initialProbs
             };
         case HOLD_CARD:
             let newHold = [...state.hold];
             newHold[action.payload] = !state.hold[action.payload];
+            // Skip probability calculation on touch devices for performance
+            const newProbs = isTouchDevice() ? null : calculateProbabilities(state.hand, newHold);
             return {
                 ...state,
                 hold: newHold,
-                probabilities: calculateProbabilities(state.hand, newHold)
+                probabilities: newProbs
             };
         case DEAL_NEXT_CARDS: {
             return {

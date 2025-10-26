@@ -11,6 +11,12 @@ const OddsDisplay = () => {
         betAmount: state.game.betAmount
     };
 
+    // Disable on mobile/tablet for performance
+    // Check for touch device (simple heuristic)
+    const isTouchDevice = useMemo(() => {
+        return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    }, []);
+
     const oddsRows = useMemo(() => {
         if (!probabilities) return [];
         // Get hand types in the same order as PayTableData
@@ -51,6 +57,11 @@ const OddsDisplay = () => {
 
         return total;
     }, [probabilities, betAmount]);
+
+    // Don't render on touch devices (mobile/tablet) for performance
+    if (isTouchDevice) {
+        return null;
+    }
 
     // Only show odds during the hold/discard phase (after deal, before draw)
     if (roundEnded || !probabilities) {
