@@ -1,6 +1,15 @@
-import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, hideDiscardedCards, ADD_CREDIT, SUBTRACT_CREDIT } from "./index";
+import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, UPDATE_PROBABILITIES, hideDiscardedCards, ADD_CREDIT, SUBTRACT_CREDIT } from "./index";
 import CardList from "../lib/CardList";
+import { calculateProbabilities } from "../lib/ProbabilityCalculator";
 import _ from "lodash";
+
+// Debounce timer for probability calculations
+let probabilityCalculationTimer = null;
+
+// Check if device is touch-enabled (mobile/tablet)
+const isTouchDevice = () => {
+    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+};
 
 export const newHand = () => {
     let deck = _.shuffle(CardList);
@@ -16,10 +25,47 @@ export const newHand = () => {
 
 export const holdCard = (index) => {
     return (dispatch, getState) => {
+        // Immediately update the hold state for instant UI feedback
         dispatch({
             type: HOLD_CARD,
             payload: index
-        }); 
+        });
+
+        // Skip probability calculation on touch devices for performance
+        if (isTouchDevice()) {
+            return;
+        }
+
+        // Debounce probability calculation to avoid blocking on rapid clicks
+        if (probabilityCalculationTimer) {
+            clearTimeout(probabilityCalculationTimer);
+        }
+
+        probabilityCalculationTimer = setTimeout(() => {
+            const state = getState();
+            const hand = state.game.hand;
+            const hold = state.game.hold;
+
+            // Calculate probabilities asynchronously using requestIdleCallback or setTimeout
+            if (window.requestIdleCallback) {
+                window.requestIdleCallback(() => {
+                    const probabilities = calculateProbabilities(hand, hold);
+                    dispatch({
+                        type: UPDATE_PROBABILITIES,
+                        payload: probabilities
+                    });
+                }, { timeout: 100 });
+            } else {
+                // Fallback for browsers without requestIdleCallback
+                setTimeout(() => {
+                    const probabilities = calculateProbabilities(hand, hold);
+                    dispatch({
+                        type: UPDATE_PROBABILITIES,
+                        payload: probabilities
+                    });
+                }, 0);
+            }
+        }, 150); // 150ms debounce delay
     };
 };
 

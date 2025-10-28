@@ -7,7 +7,6 @@ import DealBtnContainer from "./components/DealBtnContainer";
 import HandStatusContainer from "./components/HandStatusContainer";
 import ImagePreload from "./components/ImagePreload";
 import PayTableContainer from "./components/PayTableContainer";
-import OddsDisplay from "./components/OddsDisplay";
 import WinContainer from "./components/WinContainer";
 import { useGameContext } from "./context/GameContext";
 
@@ -19,7 +18,6 @@ const App = () => {
 		<main className="App">
 		<ImagePreload />
 		<PayTableContainer />
-		<OddsDisplay />
 		<section className="hand">
 			<HandStatusContainer />
 			<CardContainer />
@@ -30,7 +28,7 @@ const App = () => {
 			<CreditContainer />
 		</section>
 		<section className="buttonRow">
-			<button 
+			<button
 				onClick={(e) => {
 					e.preventDefault();
 					console.log("Help button clicked");

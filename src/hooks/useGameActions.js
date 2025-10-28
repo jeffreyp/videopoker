@@ -3,19 +3,29 @@ import { useGameContext } from '../context/GameContext';
 import CardList from "../lib/CardList";
 import _ from "lodash";
 import { evaluateHand } from "../lib/Evaluator";
-import { 
-    NEW_HAND, 
-    HOLD_CARD, 
-    DEAL_NEXT_CARDS, 
+import { calculateProbabilities } from '../lib/ProbabilityCalculator';
+import {
+    NEW_HAND,
+    HOLD_CARD,
+    DEAL_NEXT_CARDS,
     SET_BET_AMOUNT,
-    ADD_CREDIT, 
-    SUBTRACT_CREDIT, 
+    UPDATE_PROBABILITIES,
+    ADD_CREDIT,
+    SUBTRACT_CREDIT,
     GAME_OVER,
     RESTART_GAME,
-    UI_CARD_REVEAL, 
+    UI_CARD_REVEAL,
     UI_CARD_RESET,
-    UI_CARD_IMAGE_LOADED 
+    UI_CARD_IMAGE_LOADED
 } from '../actions/index';
+
+// Debounce timer for probability calculations
+let probabilityCalculationTimer = null;
+
+// Check if device is touch-enabled (mobile/tablet)
+const isTouchDevice = () => {
+    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+};
 
 export const useGameActions = () => {
     const { state, dispatch } = useGameContext();
@@ -33,11 +43,49 @@ export const useGameActions = () => {
     }, [dispatch]);
 
     const holdCard = useCallback((index) => {
+        // Immediately update the hold state for instant UI feedback
         dispatch({
             type: HOLD_CARD,
             payload: index
         });
-    }, [dispatch, state.game.hold]);
+
+        // Skip probability calculation on touch devices for performance
+        if (isTouchDevice()) {
+            return;
+        }
+
+        // Debounce probability calculation to avoid blocking on rapid clicks
+        if (probabilityCalculationTimer) {
+            clearTimeout(probabilityCalculationTimer);
+        }
+
+        probabilityCalculationTimer = setTimeout(() => {
+            const hand = state.game.hand;
+            const hold = [...state.game.hold];
+            // Toggle the hold state for this card
+            hold[index] = !hold[index];
+
+            // Calculate probabilities asynchronously using requestIdleCallback or setTimeout
+            if (window.requestIdleCallback) {
+                window.requestIdleCallback(() => {
+                    const probabilities = calculateProbabilities(hand, hold);
+                    dispatch({
+                        type: UPDATE_PROBABILITIES,
+                        payload: probabilities
+                    });
+                }, { timeout: 100 });
+            } else {
+                // Fallback for browsers without requestIdleCallback
+                setTimeout(() => {
+                    const probabilities = calculateProbabilities(hand, hold);
+                    dispatch({
+                        type: UPDATE_PROBABILITIES,
+                        payload: probabilities
+                    });
+                }, 0);
+            }
+        }, 150); // 150ms debounce delay
+    }, [dispatch, state.game.hold, state.game.hand]);
 
     const dealNextCards = useCallback(() => {
         let deck = [...state.game.deck];

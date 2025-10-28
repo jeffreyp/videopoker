@@ -1,11 +1,5 @@
-import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, GAME_OVER, RESTART_GAME } from "../actions/index";
+import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, UPDATE_PROBABILITIES, GAME_OVER, RESTART_GAME } from "../actions/index";
 import { evaluateHand } from "../lib/Evaluator";
-import { calculateProbabilities } from "../lib/ProbabilityCalculator";
-
-// Check if device is touch-enabled (mobile/tablet)
-const isTouchDevice = () => {
-    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-};
 
 export const initialGameState = {
     hand: [null, null, null, null, null],
@@ -21,9 +15,8 @@ export const initialGameState = {
 export const gameReducer = (state = initialGameState, action) => {
     switch (action.type) {
         case NEW_HAND:
-            const initialHold = [false, false, false, false, false];
-            // Skip probability calculation on touch devices for performance
-            const initialProbs = isTouchDevice() ? null : calculateProbabilities(action.payload.hand, initialHold);
+            // Don't calculate probabilities on initial deal (0 cards held = 1.5M combinations)
+            // Wait for user to hold at least one card before calculating
             return {
                 ...initialGameState,
                 betAmount: state.betAmount,
@@ -31,17 +24,20 @@ export const gameReducer = (state = initialGameState, action) => {
                 deck: action.payload.deck,
                 roundEnded: false,
                 handWin: evaluateHand(action.payload.hand, state.betAmount),
-                probabilities: initialProbs
+                probabilities: null
             };
         case HOLD_CARD:
             let newHold = [...state.hold];
             newHold[action.payload] = !state.hold[action.payload];
-            // Skip probability calculation on touch devices for performance
-            const newProbs = isTouchDevice() ? null : calculateProbabilities(state.hand, newHold);
             return {
                 ...state,
-                hold: newHold,
-                probabilities: newProbs
+                hold: newHold
+                // Probabilities will be updated asynchronously via UPDATE_PROBABILITIES action
+            };
+        case UPDATE_PROBABILITIES:
+            return {
+                ...state,
+                probabilities: action.payload
             };
         case DEAL_NEXT_CARDS: {
             return {
