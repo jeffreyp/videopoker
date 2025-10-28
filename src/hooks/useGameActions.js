@@ -22,11 +22,6 @@ import {
 // Debounce timer for probability calculations
 let probabilityCalculationTimer = null;
 
-// Check if device is touch-enabled (mobile/tablet)
-const isTouchDevice = () => {
-    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-};
-
 export const useGameActions = () => {
     const { state, dispatch } = useGameContext();
 
@@ -48,11 +43,6 @@ export const useGameActions = () => {
             type: HOLD_CARD,
             payload: index
         });
-
-        // Skip probability calculation on touch devices for performance
-        if (isTouchDevice()) {
-            return;
-        }
 
         // Debounce probability calculation to avoid blocking on rapid clicks
         if (probabilityCalculationTimer) {

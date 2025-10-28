@@ -6,11 +6,6 @@ import _ from "lodash";
 // Debounce timer for probability calculations
 let probabilityCalculationTimer = null;
 
-// Check if device is touch-enabled (mobile/tablet)
-const isTouchDevice = () => {
-    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-};
-
 export const newHand = () => {
     let deck = _.shuffle(CardList);
     let hand = [];
@@ -30,11 +25,6 @@ export const holdCard = (index) => {
             type: HOLD_CARD,
             payload: index
         });
-
-        // Skip probability calculation on touch devices for performance
-        if (isTouchDevice()) {
-            return;
-        }
 
         // Debounce probability calculation to avoid blocking on rapid clicks
         if (probabilityCalculationTimer) {

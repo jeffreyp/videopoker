@@ -108,7 +108,7 @@ The probability calculator handles complex scenarios efficiently:
 - **Debouncing**: 150ms delay prevents lag from rapid card selection
 - **Async calculation**: Uses `requestIdleCallback` to avoid blocking UI
 - **Smart caching**: Optimizes repeated calculations
-- **Mobile optimization**: Disables probability display on touch devices
+- **Universal support**: Works smoothly on desktop, tablet, and mobile devices
 - **Complexity handling**:
   - 0 cards held: No calculation (display placeholder)
   - 1 card held: 178K combinations (~100ms)

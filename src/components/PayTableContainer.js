@@ -11,11 +11,6 @@ const PayTableContainer = () => {
         probabilities: state.game.probabilities
     };
 
-    // Check if device is touch-enabled (mobile/tablet)
-    const isTouchDevice = useMemo(() => {
-        return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    }, []);
-
     const tableRows = useMemo(() => {
         return PayTableData.map((row, rowIndex) => {
             let textClasses = "";
@@ -32,7 +27,7 @@ const PayTableContainer = () => {
             let probability = null;
             let expectedValue = null;
 
-            if (!isTouchDevice && probabilities) {
+            if (probabilities) {
                 probability = probabilities[handType] || 0;
                 expectedValue = probability * payout;
             }
@@ -58,11 +53,11 @@ const PayTableContainer = () => {
                 </tr>
             );
         });
-    }, [handWinName, probabilities, isTouchDevice]);
+    }, [handWinName, probabilities]);
 
     // Calculate total expected value
     const totalExpectedValue = useMemo(() => {
-        if (isTouchDevice || !probabilities) return '—';
+        if (!probabilities) return '—';
 
         let total = 0;
         PayTableData.forEach((row) => {
@@ -73,7 +68,7 @@ const PayTableContainer = () => {
         });
 
         return total.toFixed(2);
-    }, [probabilities, isTouchDevice]);
+    }, [probabilities]);
 
     return (
         <article className="payTableContainer padded">
@@ -82,25 +77,19 @@ const PayTableContainer = () => {
                     <tr>
                         <th>Hand</th>
                         <th>Payout</th>
-                        {!isTouchDevice && (
-                            <>
-                                <th>Probability</th>
-                                <th>EV</th>
-                            </>
-                        )}
+                        <th>Probability</th>
+                        <th>EV</th>
                     </tr>
                 </thead>
                 <tbody>
                     {tableRows}
                 </tbody>
-                {!isTouchDevice && (
-                    <tfoot>
-                        <tr className="total-row">
-                            <td colSpan="3">Total Expected Value:</td>
-                            <td>{totalExpectedValue}</td>
-                        </tr>
-                    </tfoot>
-                )}
+                <tfoot>
+                    <tr className="total-row">
+                        <td colSpan="3">Total Expected Value:</td>
+                        <td>{totalExpectedValue}</td>
+                    </tr>
+                </tfoot>
             </table>
         </article>
     );
