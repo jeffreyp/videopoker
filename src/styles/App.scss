@@ -68,11 +68,69 @@ span {
 .payTableContainer {
     grid-area: paytable;
     padding-top: 4px;
+    position: relative;
     @include phoneVerticalWidth {
         padding-top: 3px;
     }
     @include landscapeGeneral {
         padding-top: 2px;
+    }
+
+    .calculating-indicator {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: $text-highlight-color;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        z-index: 10;
+        pointer-events: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+        @include phoneVerticalWidth {
+            top: 6px;
+            right: 8px;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            gap: 6px;
+        }
+
+        @include landscapeGeneral {
+            top: 4px;
+            right: 8px;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            gap: 6px;
+        }
+
+        span {
+            font-size: inherit;
+            -webkit-text-stroke: 0;
+        }
+
+        .calculating-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-top-color: $text-highlight-color;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+
+            @include phoneVerticalWidth {
+                width: 12px;
+                height: 12px;
+            }
+
+            @include landscapeGeneral {
+                width: 12px;
+                height: 12px;
+            }
+        }
     }
 
     .payTable {

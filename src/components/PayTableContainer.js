@@ -5,10 +5,10 @@ import { formatProbability } from '../lib/ProbabilityCalculator';
 
 const PayTableContainer = () => {
     const { state } = useGameContext();
-    const { handWinName, roundEnded, probabilities } = {
+    const { handWinName, probabilities, isCalculatingProbabilities } = {
         handWinName: state.game.handWin.name,
-        roundEnded: state.game.roundEnded,
-        probabilities: state.game.probabilities
+        probabilities: state.game.probabilities,
+        isCalculatingProbabilities: state.game.isCalculatingProbabilities
     };
 
     const tableRows = useMemo(() => {
@@ -72,6 +72,12 @@ const PayTableContainer = () => {
 
     return (
         <article className="payTableContainer padded">
+            {isCalculatingProbabilities && (
+                <div className="calculating-indicator">
+                    <div className="calculating-spinner"></div>
+                    <span>Calculating...</span>
+                </div>
+            )}
             <table className="payTable">
                 <thead>
                     <tr>

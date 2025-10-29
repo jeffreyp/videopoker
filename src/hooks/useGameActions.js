@@ -10,6 +10,7 @@ import {
     DEAL_NEXT_CARDS,
     SET_BET_AMOUNT,
     UPDATE_PROBABILITIES,
+    CALCULATING_PROBABILITIES,
     ADD_CREDIT,
     SUBTRACT_CREDIT,
     GAME_OVER,
@@ -26,6 +27,12 @@ export const useGameActions = () => {
     const { state, dispatch } = useGameContext();
 
     const newHand = useCallback(() => {
+        // Cancel any pending probability calculations
+        if (probabilityCalculationTimer) {
+            clearTimeout(probabilityCalculationTimer);
+            probabilityCalculationTimer = null;
+        }
+
         let deck = _.shuffle(CardList);
         let hand = [];
         for (let i = 0; i < 5; i++) {
@@ -55,24 +62,42 @@ export const useGameActions = () => {
             // Toggle the hold state for this card
             hold[index] = !hold[index];
 
+            // Only calculate if at least one card is held
+            const numHeld = hold.filter(h => h).length;
+            if (numHeld === 0) {
+                // Don't calculate for 0 held cards - too expensive
+                return;
+            }
+
+            // Signal that calculation is starting
+            dispatch({
+                type: CALCULATING_PROBABILITIES,
+                payload: true
+            });
+
             // Calculate probabilities asynchronously using requestIdleCallback or setTimeout
-            if (window.requestIdleCallback) {
-                window.requestIdleCallback(() => {
+            const performCalculation = () => {
+                try {
                     const probabilities = calculateProbabilities(hand, hold);
                     dispatch({
                         type: UPDATE_PROBABILITIES,
                         payload: probabilities
                     });
-                }, { timeout: 50 });
+                } catch (error) {
+                    console.error('Error calculating probabilities:', error);
+                    // Clear calculating flag on error
+                    dispatch({
+                        type: CALCULATING_PROBABILITIES,
+                        payload: false
+                    });
+                }
+            };
+
+            if (window.requestIdleCallback) {
+                window.requestIdleCallback(performCalculation, { timeout: 50 });
             } else {
                 // Fallback for browsers without requestIdleCallback
-                setTimeout(() => {
-                    const probabilities = calculateProbabilities(hand, hold);
-                    dispatch({
-                        type: UPDATE_PROBABILITIES,
-                        payload: probabilities
-                    });
-                }, 0);
+                setTimeout(performCalculation, 0);
             }
         }, 50); // Reduced from 150ms to 50ms for snappier response
     }, [dispatch, state.game.hold, state.game.hand]);

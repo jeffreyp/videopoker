@@ -1,4 +1,4 @@
-import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, UPDATE_PROBABILITIES, GAME_OVER, RESTART_GAME } from "../actions/index";
+import { NEW_HAND, HOLD_CARD, DEAL_NEXT_CARDS, SET_BET_AMOUNT, UPDATE_PROBABILITIES, CALCULATING_PROBABILITIES, GAME_OVER, RESTART_GAME } from "../actions/index";
 import { evaluateHand } from "../lib/Evaluator";
 
 export const initialGameState = {
@@ -9,7 +9,8 @@ export const initialGameState = {
     handWin: { name: "", win: 0 },
     betAmount: 5,
     isGameOver: false,
-    probabilities: null
+    probabilities: null,
+    isCalculatingProbabilities: false
 };
 
 export const gameReducer = (state = initialGameState, action) => {
@@ -24,7 +25,8 @@ export const gameReducer = (state = initialGameState, action) => {
                 deck: action.payload.deck,
                 roundEnded: false,
                 handWin: evaluateHand(action.payload.hand, state.betAmount),
-                probabilities: null
+                probabilities: null,
+                isCalculatingProbabilities: false
             };
         case HOLD_CARD:
             let newHold = [...state.hold];
@@ -34,10 +36,16 @@ export const gameReducer = (state = initialGameState, action) => {
                 hold: newHold
                 // Probabilities will be updated asynchronously via UPDATE_PROBABILITIES action
             };
+        case CALCULATING_PROBABILITIES:
+            return {
+                ...state,
+                isCalculatingProbabilities: action.payload
+            };
         case UPDATE_PROBABILITIES:
             return {
                 ...state,
-                probabilities: action.payload
+                probabilities: action.payload,
+                isCalculatingProbabilities: false
             };
         case DEAL_NEXT_CARDS: {
             return {
