@@ -63,7 +63,7 @@ export const useGameActions = () => {
                         type: UPDATE_PROBABILITIES,
                         payload: probabilities
                     });
-                }, { timeout: 100 });
+                }, { timeout: 50 });
             } else {
                 // Fallback for browsers without requestIdleCallback
                 setTimeout(() => {
@@ -74,7 +74,7 @@ export const useGameActions = () => {
                     });
                 }, 0);
             }
-        }, 150); // 150ms debounce delay
+        }, 50); // Reduced from 150ms to 50ms for snappier response
     }, [dispatch, state.game.hold, state.game.hand]);
 
     const dealNextCards = useCallback(() => {
@@ -111,7 +111,7 @@ export const useGameActions = () => {
         if (handWin && handWin.win > 0) {
             setTimeout(() => {
                 dispatch({ type: ADD_CREDIT, payload: handWin.win });
-            }, 600);
+            }, 300); // Reduced from 600ms to 300ms for faster feedback
         }
     }, [dispatch, state.game.hold, state.game.hand, state.game.deck, state.game.betAmount]);
 
@@ -129,7 +129,7 @@ export const useGameActions = () => {
         if (currentCredits - betAmount < 1) {
             setTimeout(() => {
                 dispatch({ type: GAME_OVER });
-            }, 100);
+            }, 50); // Reduced from 100ms to 50ms
         }
     }, [dispatch, state.game.betAmount, state.credit.amount]);
 
@@ -142,10 +142,10 @@ export const useGameActions = () => {
         for (let i = 0; i < 5; i++) {
             const timeoutId = setTimeout(() => {
                 dispatch({ type: UI_CARD_REVEAL, payload: i });
-            }, i * 100);
+            }, i * 40); // Reduced from 100ms to 40ms for faster reveals
             timeouts.push(timeoutId);
         }
-        
+
         return () => {
             timeouts.forEach(clearTimeout);
         };

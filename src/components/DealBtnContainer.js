@@ -23,14 +23,10 @@ const DealBtnContainer = () => {
             if (credits < betAmount) return;
             subtractCredits();
             newHand();
-            setTimeout(() => {
-                revealCards();
-            }, 50);
+            revealCards(); // Removed 50ms delay for instant response
         } else {
             dealNextCards();
-            setTimeout(() => {
-                revealCards();
-            }, 50);
+            revealCards(); // Removed 50ms delay for instant response
         }
     }, [roundEnded, subtractCredits, newHand, revealCards, dealNextCards, imagesLoaded, isGameOver, restartGame, credits, betAmount]);
 
