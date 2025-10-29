@@ -46,8 +46,8 @@ export const gameReducer = (state = initialGameState, action) => {
                 hold: [false, false, false, false, false],
                 roundEnded: true,
                 handWin: evaluateHand(action.payload.hand, state.betAmount),
-                deck: action.payload.deck,
-                probabilities: null
+                deck: action.payload.deck
+                // Keep probabilities visible until next NEW_HAND
             };
         }
         case SET_BET_AMOUNT:
