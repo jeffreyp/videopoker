@@ -3,3 +3,14 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+
+// Mock Web Worker for test environment
+class WorkerMock {
+    constructor() {}
+    postMessage() {}
+    onmessage = null;
+    onerror = null;
+    terminate() {}
+}
+
+global.Worker = WorkerMock;

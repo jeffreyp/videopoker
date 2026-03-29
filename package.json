@@ -46,6 +46,11 @@
       "last 1 safari version"
     ]
   },
+  "jest": {
+    "moduleNameMapper": {
+      "createProbabilityWorker": "<rootDir>/src/workers/__mocks__/createProbabilityWorker.js"
+    }
+  },
   "devDependencies": {
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

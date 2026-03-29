@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 import { useGameContext } from '../context/GameContext';
 import CardList from "../lib/CardList";
-import _ from "lodash";
 import { evaluateHand } from "../lib/Evaluator";
-import { calculateProbabilities } from '../lib/ProbabilityCalculator';
+import createProbabilityWorker from '../workers/createProbabilityWorker';
 import {
     NEW_HAND,
     HOLD_CARD,
@@ -20,8 +19,26 @@ import {
     UI_CARD_IMAGE_LOADED
 } from '../actions/index';
 
+function shuffle(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
 // Debounce timer for probability calculations
 let probabilityCalculationTimer = null;
+
+// Singleton Web Worker for off-thread probability calculations
+let probabilityWorker = null;
+function getProbabilityWorker() {
+    if (!probabilityWorker) {
+        probabilityWorker = createProbabilityWorker();
+    }
+    return probabilityWorker;
+}
 
 export const useGameActions = () => {
     const { state, dispatch } = useGameContext();
@@ -33,7 +50,7 @@ export const useGameActions = () => {
             probabilityCalculationTimer = null;
         }
 
-        let deck = _.shuffle(CardList);
+        let deck = shuffle(CardList);
         let hand = [];
         for (let i = 0; i < 5; i++) {
             hand[i] = deck.pop();
@@ -75,31 +92,20 @@ export const useGameActions = () => {
                 payload: true
             });
 
-            // Calculate probabilities asynchronously using requestIdleCallback or setTimeout
-            const performCalculation = () => {
-                try {
-                    const probabilities = calculateProbabilities(hand, hold);
-                    dispatch({
-                        type: UPDATE_PROBABILITIES,
-                        payload: probabilities
-                    });
-                } catch (error) {
-                    console.error('Error calculating probabilities:', error);
-                    // Clear calculating flag on error
-                    dispatch({
-                        type: CALCULATING_PROBABILITIES,
-                        payload: false
-                    });
-                }
+            // Run calculation off the main thread via Web Worker
+            const worker = getProbabilityWorker();
+            worker.onmessage = (e) => {
+                dispatch({
+                    type: UPDATE_PROBABILITIES,
+                    payload: e.data
+                });
             };
-
-            if (window.requestIdleCallback) {
-                window.requestIdleCallback(performCalculation, { timeout: 50 });
-            } else {
-                // Fallback for browsers without requestIdleCallback
-                setTimeout(performCalculation, 0);
-            }
-        }, 50); // Reduced from 150ms to 50ms for snappier response
+            worker.onerror = (err) => {
+                console.error('Probability worker error:', err);
+                dispatch({ type: CALCULATING_PROBABILITIES, payload: false });
+            };
+            worker.postMessage({ hand, hold });
+        }, 50);
     }, [dispatch, state.game.hold, state.game.hand]);
 
     const dealNextCards = useCallback(() => {
@@ -112,13 +118,13 @@ export const useGameActions = () => {
                     hand[i] = newCard;
                 } else {
                     // If deck is empty, reshuffle remaining cards
-                    deck = _.shuffle(CardList.filter(card => !hand.includes(card)));
+                    deck = shuffle(CardList.filter(card => !hand.includes(card)));
                     const newCard = deck.pop();
                     hand[i] = newCard;
                 }
             }
         }
-        
+
         dispatch({
             type: DEAL_NEXT_CARDS,
             payload: { hand, deck }
@@ -136,7 +142,7 @@ export const useGameActions = () => {
         if (handWin && handWin.win > 0) {
             setTimeout(() => {
                 dispatch({ type: ADD_CREDIT, payload: handWin.win });
-            }, 300); // Reduced from 600ms to 300ms for faster feedback
+            }, 300);
         }
     }, [dispatch, state.game.hold, state.game.hand, state.game.deck, state.game.betAmount]);
 
@@ -147,14 +153,14 @@ export const useGameActions = () => {
     const subtractCredits = useCallback(() => {
         const betAmount = state.game.betAmount;
         const currentCredits = state.credit.amount;
-        
+
         dispatch({ type: SUBTRACT_CREDIT, payload: betAmount });
-        
+
         // Check if this would result in game over (no credits left for next minimum bet)
         if (currentCredits - betAmount < 1) {
             setTimeout(() => {
                 dispatch({ type: GAME_OVER });
-            }, 50); // Reduced from 100ms to 50ms
+            }, 50);
         }
     }, [dispatch, state.game.betAmount, state.credit.amount]);
 
@@ -167,7 +173,7 @@ export const useGameActions = () => {
         for (let i = 0; i < 5; i++) {
             const timeoutId = setTimeout(() => {
                 dispatch({ type: UI_CARD_REVEAL, payload: i });
-            }, i * 40); // Reduced from 100ms to 40ms for faster reveals
+            }, i * 40);
             timeouts.push(timeoutId);
         }
 

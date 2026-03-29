@@ -8,4 +8,4 @@ const BetContainer = () => {
     );
 };
 
-export default BetContainer;
+export default React.memo(BetContainer);

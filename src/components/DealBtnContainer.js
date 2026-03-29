@@ -51,4 +51,4 @@ const DealBtnContainer = () => {
     );
 };
 
-export default DealBtnContainer;
+export default React.memo(DealBtnContainer);

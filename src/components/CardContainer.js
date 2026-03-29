@@ -47,5 +47,5 @@ const CardContainer = () => {
     );
 };
 
-export default CardContainer;
+export default React.memo(CardContainer);
 

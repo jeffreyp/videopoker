@@ -10,7 +10,7 @@ import PayTableContainer from "./components/PayTableContainer";
 import WinContainer from "./components/WinContainer";
 import { useGameContext } from "./context/GameContext";
 
-const App = () => {
+const App = React.memo(() => {
 	const { state } = useGameContext();
 	const isGameOver = state.game.isGameOver;
 
@@ -29,10 +29,7 @@ const App = () => {
 		</section>
 		<section className="buttonRow">
 			<button
-				onClick={(e) => {
-					e.preventDefault();
-					console.log("Help button clicked");
-				}}
+				onClick={(e) => { e.preventDefault(); }}
 				aria-label="Show game help"
 			>
 				HELP
@@ -50,6 +47,6 @@ const App = () => {
 		)}
 		</main>
 	);
-};
+});
 
 export default App;
